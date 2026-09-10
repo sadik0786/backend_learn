@@ -126,4 +126,24 @@ Step 6: Wapas 'dev' branch par chale jaayein agle kaam ke liye
 - Get Updates      : git pull origin <branch_name>
 - Send Updates     : git push origin <branch_name>
 - List Branches    : git branch
+- new branch       : git branch <branch_name>
+- delete branch    : git branch -d <branch_name>
+
+
 ================================================================================
+5. Existing Project setup
+================================================================================
+-git init --- Git initialize karein
+-git add .   ----Saari files ko Git me add karein
+-git commit -m "Initial commit"  ----- Initial commit karein
+-git branch -M main  -----Main branch set karein
+-git remote add origin YOUR_GITHUB_URL  ---- Local project ko GitHub repository se connect karein
+-git push -u origin main  ----Code ko GitHub par push karein
+
+=================================================================================================================
+Tip: Agar aap project me node_modules, .env, ya large temporary files upload nahi karna chahte, toh git add . se pehle ek .gitignore file banakar usme un files/folders ke naam daal dein.
+file:  .gitignore
+node_modules
+.env
+=================================================================================================================
+
