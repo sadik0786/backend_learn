@@ -1,0 +1,129 @@
+================================================================================
+                    GIT COMMANDS & WORKFLOW COMPLETE GUIDE
+================================================================================
+
+Yeh guide aapko Git ke sabse zaroori commands aur unke practical daily use cases 
+ko detailed tarike se samjhati hai (featuring 'dev' and 'main' branches).
+
+--------------------------------------------------------------------------------
+1. BASIC CONCEPTS & BRANCH OVERVIEW
+--------------------------------------------------------------------------------
+- main / master : Production-ready code (Live server par chalne wala stable code).
+- dev           : Development branch (Jahan roz ka kaam aur new features add hote hain).
+
+--------------------------------------------------------------------------------
+2. DETAILED COMMANDS REFERENCE
+--------------------------------------------------------------------------------
+
+[1] git status
+    - Description: Check karta hai ki kaunsi files change hui hain, kaunsi stage 
+      ho chuki hain, aur kaunsi files abhi untracked hain.
+    - Example:
+        $ git status
+
+[2] git add
+    - Description: Files ko "Staging Area" me bhejta hai (commit ke liye ready karta hai).
+    - Examples:
+        $ git add .               # Sabhi changed & new files add karne ke liye
+        $ git add index.html      # Sirf specific file add karne ke liye
+
+[3] git commit -m "your message"
+    - Description: Staged changes ka snapshot local database me save karta hai.
+    - Examples:
+        $ git commit -m "Feat: Add user authentication system"
+        $ git commit -m "Fix: Navbar responsive layout issue"
+
+[4] git branch
+    - Description: Existing branches ki list dikhata hai aur batata hai aap kis par ho (*).
+    - Examples:
+        $ git branch              # Local branches list karne ke liye
+        $ git branch -a           # Remote + Local sabhi branches dekhne ke liye
+        $ git branch new-feature  # Nayi branch banane ke liye (switch nahi karega)
+
+[5] git checkout
+    - Description: Branch switch karne ke liye ya new branch banakar switch karne ke liye.
+    - Examples:
+        $ git checkout main       # 'main' branch par switch karein
+        $ git checkout dev        # 'dev' branch par switch karein
+        $ git checkout -b feature # Nayi branch banakar turant uspar switch karein
+
+[6] git pull
+    - Description: Remote repository (GitHub/GitLab) se latest changes fetch aur merge karta hai.
+    - Examples:
+        $ git pull origin dev     # Remote 'dev' branch se latest code laayein
+        $ git pull origin main    # Remote 'main' branch se latest code laayein
+
+[7] git push
+    - Description: Local commits ko remote repository par upload karta hai.
+    - Examples:
+        $ git push origin dev     # Local 'dev' changes GitHub par bhejne ke liye
+        $ git push origin main    # Local 'main' changes GitHub par bhejne ke liye
+
+
+--------------------------------------------------------------------------------
+3. STEP-BY-STEP REAL WORLD WORKFLOW EXAMPLES
+--------------------------------------------------------------------------------
+
+================================================================================
+SCENARIO A: Daily Development Workflow on 'dev' Branch
+================================================================================
+Aap apne project ke 'dev' branch par naye feature par kaam kar rahe hain.
+
+Step 1: Ensure you are on 'dev' branch
+    $ git checkout dev
+
+Step 2: Pull latest changes from server (Baki team members ka code lene ke liye)
+    $ git pull origin dev
+
+Step 3: Apne code me changes / files write karein, phir status check karein
+    $ git status
+
+Step 4: Changes ko stage karein
+    $ git add .
+
+Step 5: Meaningful message ke sath commit karein
+    $ git commit -m "Add profile page design and styling"
+
+Step 6: Code ko remote GitHub/GitLab server par push karein
+    $ git push origin dev
+
+
+================================================================================
+SCENARIO B: Release/Deploying 'dev' Code to 'main'
+================================================================================
+Jab 'dev' branch ka code test ho jaaye aur live/production (main) par bhejna ho.
+
+Step 1: Pehle 'dev' par sara code commit aur push kar lein
+    $ git checkout dev
+    $ git add .
+    $ git commit -m "Final bug fixes before release"
+    $ git push origin dev
+
+Step 2: 'main' branch par switch karein
+    $ git checkout main
+
+Step 3: 'main' branch ka latest server code pull karein
+    $ git pull origin main
+
+Step 4: 'dev' branch ka saara code 'main' me merge karein
+    $ git merge dev
+
+Step 5: Merged code ko remote 'main' branch par push karein
+    $ git push origin main
+
+Step 6: Wapas 'dev' branch par chale jaayein agle kaam ke liye
+    $ git checkout dev
+
+
+================================================================================
+4. BONUS CHEAT SHEET (QUICK RECAP)
+================================================================================
+- Check Status     : git status
+- Stage Files      : git add .
+- Commit Code      : git commit -m "Message"
+- Switch Branch    : git checkout <branch_name>
+- Create & Switch  : git checkout -b <new_branch_name>
+- Get Updates      : git pull origin <branch_name>
+- Send Updates     : git push origin <branch_name>
+- List Branches    : git branch
+================================================================================
