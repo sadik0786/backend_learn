@@ -10,6 +10,8 @@ import {
   deleteUser,
   getUsersPagination,
   searchUsersPagination,
+  searchSortUsersPagination,
+  filterUsersPagination,
 } from "./user.controller.js";
 
 const router = Router();
@@ -18,6 +20,8 @@ router.get("/", getUsers);
 router.post("/", validate(createUserSchema), createUser);
 router.get("/pagination", getUsersPagination);
 router.get("/search", searchUsersPagination);
+router.get("/search-sort", searchSortUsersPagination);
+router.get("/filter", filterUsersPagination);
 router.get("/:id", getUserById);
 router.put("/:id", updateUser);
 router.delete("/:id", deleteUser);

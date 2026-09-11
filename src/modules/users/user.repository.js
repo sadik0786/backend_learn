@@ -72,3 +72,47 @@ export async function searchUsersCount(search) {
 
   return Number(result.rows[0].total);
 }
+
+// search sort users pagination
+export async function searchSortUsersPagination(
+  search,
+  page,
+  limit,
+  sortBy,
+  sortOrder,
+) {
+  const result = await query(
+    "SELECT * FROM auth.fn_search_sort_users_pagination($1,$2,$3,$4,$5)",
+    [search, page, limit, sortBy, sortOrder],
+  );
+
+  return result.rows;
+}
+
+// filter users pagination
+export async function filterUsersPagination(
+  search,
+  role,
+  page,
+  limit,
+  sortBy,
+  sortOrder,
+) {
+  const result = await query(
+    `SELECT * FROM auth.fn_filter_users_pagination($1,$2,$3,$4,$5,$6)`,
+    [search, role, page, limit, sortBy, sortOrder],
+  );
+
+  return result.rows;
+}
+
+// filter users count
+export async function filterUsersCount(search, role) {
+  const result = await query(
+    `SELECT auth.fn_filter_users_count($1,$2) AS total`,
+    [search, role],
+  );
+
+  return Number(result.rows[0].total);
+}
+

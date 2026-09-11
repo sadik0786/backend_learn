@@ -366,6 +366,206 @@ WHERE
 $$;
 
 -- ==========================================================
+-- SEARCH USERS WITH PAGINATION AND SORTING
+-- ==========================================================
+
+CREATE OR REPLACE FUNCTION auth.fn_search_sort_users_pagination
+(
+    p_search VARCHAR,
+    p_page INT,
+    p_limit INT,
+    p_sort_by VARCHAR,
+    p_sort_order VARCHAR
+)
+RETURNS TABLE
+(
+    id INT,
+    full_name VARCHAR,
+    email VARCHAR,
+    role VARCHAR,
+    created_at TIMESTAMP
+)
+LANGUAGE plpgsql
+AS
+$$
+BEGIN
+
+RETURN QUERY
+SELECT
+    u.id,
+    u.full_name,
+    u.email,
+    u.role,
+    u.created_at
+FROM auth.users u
+WHERE
+    u.full_name ILIKE '%' || p_search || '%'
+    OR u.email ILIKE '%' || p_search || '%'
+ORDER BY
+    CASE
+        WHEN p_sort_by = 'full_name' AND p_sort_order = 'asc'
+        THEN u.full_name
+    END ASC,
+
+    CASE
+        WHEN p_sort_by = 'full_name' AND p_sort_order = 'desc'
+        THEN u.full_name
+    END DESC,
+
+    CASE
+        WHEN p_sort_by = 'email' AND p_sort_order = 'asc'
+        THEN u.email
+    END ASC,
+
+    CASE
+        WHEN p_sort_by = 'email' AND p_sort_order = 'desc'
+        THEN u.email
+    END DESC,
+
+    CASE
+        WHEN p_sort_by = 'created_at' AND p_sort_order = 'asc'
+        THEN u.created_at
+    END ASC,
+
+    CASE
+        WHEN p_sort_by = 'created_at' AND p_sort_order = 'desc'
+        THEN u.created_at
+    END DESC,
+
+    u.id ASC
+
+LIMIT p_limit
+OFFSET (p_page - 1) * p_limit;
+
+END;
+$$;
+
+-- ==========================================================
+-- FILTER USERS WITH PAGINATION AND SORTING
+-- ==========================================================
+
+CREATE OR REPLACE FUNCTION auth.fn_filter_users_pagination
+(
+    p_search VARCHAR,
+    p_role VARCHAR,
+    p_page INT,
+    p_limit INT,
+    p_sort_by VARCHAR,
+    p_sort_order VARCHAR
+)
+RETURNS TABLE
+(
+    id INT,
+    full_name VARCHAR,
+    email VARCHAR,
+    role VARCHAR,
+    created_at TIMESTAMP
+)
+LANGUAGE plpgsql
+AS
+$$
+BEGIN
+
+RETURN QUERY
+SELECT
+    u.id,
+    u.full_name,
+    u.email,
+    u.role,
+    u.created_at
+FROM auth.users u
+WHERE
+    (
+        p_search = ''
+        OR u.full_name ILIKE '%' || p_search || '%'
+        OR u.email ILIKE '%' || p_search || '%'
+    )
+    AND
+    (
+        p_role = ''
+        OR u.role = p_role
+    )
+ORDER BY
+    CASE
+        WHEN p_sort_by = 'full_name'
+             AND p_sort_order = 'asc'
+        THEN u.full_name
+    END ASC,
+
+    CASE
+        WHEN p_sort_by = 'full_name'
+             AND p_sort_order = 'desc'
+        THEN u.full_name
+    END DESC,
+
+    CASE
+        WHEN p_sort_by = 'email'
+             AND p_sort_order = 'asc'
+        THEN u.email
+    END ASC,
+
+    CASE
+        WHEN p_sort_by = 'email'
+             AND p_sort_order = 'desc'
+        THEN u.email
+    END DESC,
+
+    CASE
+        WHEN p_sort_by = 'created_at'
+             AND p_sort_order = 'asc'
+        THEN u.created_at
+    END ASC,
+
+    CASE
+        WHEN p_sort_by = 'created_at'
+             AND p_sort_order = 'desc'
+        THEN u.created_at
+    END DESC,
+
+    u.id ASC
+
+LIMIT p_limit
+OFFSET (p_page - 1) * p_limit;
+
+END;
+$$;
+
+-- ==========================================================
+-- FILTER USERS COUNT
+-- ==========================================================
+
+CREATE OR REPLACE FUNCTION auth.fn_filter_users_count
+(
+    p_search VARCHAR,
+    p_role VARCHAR
+)
+RETURNS BIGINT
+LANGUAGE sql
+AS
+$$
+
+SELECT COUNT(*)
+FROM auth.users u
+WHERE
+    (
+        p_search = ''
+        OR u.full_name ILIKE '%' || p_search || '%'
+        OR u.email ILIKE '%' || p_search || '%'
+    )
+    AND
+    (
+        p_role = ''
+        OR u.role = p_role
+    );
+
+$$;
+
+
+
+
+
+
+-- ==========================================================
 -- TESTING
 -- ==========================================================
 

@@ -86,3 +86,74 @@ export async function searchUsersPagination(search, page, limit) {
     data: users,
   };
 }
+
+// search and sort users pagination
+export async function searchSortUsersPagination(
+  search,
+  page,
+  limit,
+  sortBy,
+  sortOrder,
+) {
+  const users = await userRepository.searchSortUsersPagination(
+    search,
+    page,
+    limit,
+    sortBy,
+    sortOrder,
+  );
+
+  const total = await userRepository.searchUsersCount(search);
+
+  const totalPages = Math.ceil(total / limit);
+
+  return {
+    page,
+    limit,
+    search,
+    sortBy,
+    sortOrder,
+    total,
+    totalPages,
+    hasNext: page < totalPages,
+    hasPrevious: page > 1,
+    data: users,
+  };
+}
+
+// filter users pagination
+export async function filterUsersPagination(
+  search,
+  role,
+  page,
+  limit,
+  sortBy,
+  sortOrder,
+) {
+  const users = await userRepository.filterUsersPagination(
+    search,
+    role,
+    page,
+    limit,
+    sortBy,
+    sortOrder,
+  );
+
+  const total = await userRepository.filterUsersCount(search, role);
+
+  const totalPages = Math.ceil(total / limit);
+
+  return {
+    page,
+    limit,
+    search,
+    role,
+    sortBy,
+    sortOrder,
+    total,
+    totalPages,
+    hasNext: page < totalPages,
+    hasPrevious: page > 1,
+    data: users,
+  };
+}
