@@ -30,7 +30,7 @@ export async function login(data) {
   }
   const isMatch = await bcrypt.compare(data.password, user.password_hash);
   if (!isMatch) {
-    throw new Error("Invalid email or password");
+    throw new AppError("Invalid email or password", 401);
   }
   const token = generateToken(user);
 

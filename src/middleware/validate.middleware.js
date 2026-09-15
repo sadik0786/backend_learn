@@ -1,6 +1,6 @@
-export const validate = (schema) => {
+export const validate = (schema, source = "body") => {
   return (req, res, next) => {
-    const result = schema.safeParse(req.body);
+    const result = schema.safeParse(req[source]);
 
     if (!result.success) {
       return res.status(400).json({
@@ -13,7 +13,7 @@ export const validate = (schema) => {
     }
 
     // Validated data ko req.body me replace kar do
-    req.body = result.data;
+    req[source] = result.data;
 
     next();
   };
