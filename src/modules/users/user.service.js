@@ -1,6 +1,8 @@
 import bcrypt from "bcrypt";
 import { AppError } from "../../utils/AppError.js";
 import * as userRepository from "./user.repository.js";
+import { withTransaction } from "../../config/db.js";
+import { createUserWithProfile as createUserWithProfileTx } from "./user.transaction.repository.js";
 
 // get all users
 export async function getUsers() {
@@ -155,5 +157,28 @@ export async function filterUsersPagination(
     hasNext: page < totalPages,
     hasPrevious: page > 1,
     data: users,
+  };
+}
+
+// create user with profile
+export async function createUserWithProfile(data) {
+  const passwordHash = await bcrypt.hash(data.password, 10);
+
+  const userId = await withTransaction((client) =>
+    createUserWithProfileTx(
+      client,
+      data.full_name,
+      data.email,
+      passwordHash,
+      data.role,
+      data.phone,
+      data.address,
+    ),
+  );
+
+  return {
+    success: true,
+    message: "User and profile created",
+    userId,
   };
 }

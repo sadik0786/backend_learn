@@ -12,8 +12,9 @@ export const validate = (schema, source = "body") => {
       });
     }
 
-    // Validated data ko req.body me replace kar do
-    req[source] = result.data;
+    if (source === "body") {
+      req.body = result.data;
+    }
 
     next();
   };

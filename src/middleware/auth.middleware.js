@@ -1,32 +1,39 @@
 import dotenv from "dotenv";
-import jwt from "jsonwebtoken";
+import { verifyToken } from "../utils/jwt.js";
 
 dotenv.config();
 
-export const verifyToken = (req, res, next) => {
+export const verifyTokenMiddleware = (req, res, next) => {
   const authHeader = req.headers.authorization;
 
   if (!authHeader) {
     return res.status(401).json({
       success: false,
-      message: "Token is required",
+      message: "Authorization header is required",
     });
   }
 
-  const token = authHeader.split(" ")[1];
+  const [scheme, token] = authHeader.split(" ");
+
+  if (scheme !== "Bearer" || !token) {
+    return res.status(401).json({
+      success: false,
+      message: "Authorization format must be Bearer <token>",
+    });
+  }
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = verifyToken(token);
 
     req.user = decoded;
 
     next();
-  } catch (err) {
+  } catch (error) {
     return res.status(401).json({
       success: false,
-      message: "Invalid Token",
+      message: "Invalid or expired token",
     });
   }
 };
 
-export default verifyToken;
+export default verifyTokenMiddleware;

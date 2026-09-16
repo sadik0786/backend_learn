@@ -113,3 +113,20 @@ export const filterUsersPagination = asyncHandler(async (req, res) => {
     ...result,
   });
 });
+
+// upload file
+export const uploadFile = asyncHandler(async (req, res) => {
+  if (!req.file) {
+    throw new AppError("File is required", 400);
+  }
+
+  res.status(201).json({
+    success: true,
+    file: {
+      filename: req.file.filename,
+      originalName: req.file.originalname,
+      size: req.file.size,
+      type: req.file.mimetype,
+    },
+  });
+});

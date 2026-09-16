@@ -27,8 +27,17 @@ export const generateToken = (user) => {
   );
 };
 
-const jwtUtils = {
-  generateToken,
+export const verifyToken = (token) => {
+  const secret = process.env.JWT_SECRET;
+
+  if (!secret) {
+    throw new Error("JWT_SECRET is not configured");
+  }
+
+  return jwt.verify(token, secret);
 };
 
-export default jwtUtils;
+export default {
+  generateToken,
+  verifyToken,
+};

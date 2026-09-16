@@ -7,7 +7,7 @@ export const register = asyncHandler(async (req, res) => {
   res.status(201).json(result);
 });
 // login
-export const loginHandler = asyncHandler(async (req, res) => {
+export const login = asyncHandler(async (req, res) => {
   const result = await authService.login(req.body);
   res.json(result);
 });
@@ -18,3 +18,5 @@ export const profile = asyncHandler(async (req, res) => {
   const result = await authService.profile(req.user.id);
   res.json(result);
 });
+
+
