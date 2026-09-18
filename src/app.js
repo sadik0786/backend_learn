@@ -1,4 +1,6 @@
 import express from "express";
+import cookieParser from "cookie-parser";
+
 import helmet from "helmet";
 import cors from "cors";
 
@@ -15,6 +17,8 @@ import swaggerUi from "swagger-ui-express";
 import { swaggerSpec } from "./config/swagger.js";
 
 const app = express();
+
+app.use(cookieParser());
 
 // Security headers
 app.use(helmet());

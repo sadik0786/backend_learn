@@ -560,10 +560,55 @@ WHERE
 
 $$;
 
+-- ==========================================================
+-- TABLE : user_profiles
+-- ==========================================================
 
+CREATE TABLE auth.user_profiles(
+    id SERIAL PRIMARY KEY,
+    user_id INT NOT NULL UNIQUE REFERENCES auth.users(id) ON DELETE CASCADE,
+    phone VARCHAR(20),
+    address TEXT,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
 
+-- ==========================================================
+-- TABLE : refresh_tokens
+-- ==========================================================
 
+CREATE TABLE IF NOT EXISTS auth.refresh_tokens (
+    id BIGSERIAL PRIMARY KEY,
 
+    user_id INTEGER NOT NULL,
+
+    token_hash TEXT NOT NULL UNIQUE,
+
+    expires_at TIMESTAMP NOT NULL,
+
+    revoked_at TIMESTAMP NULL,
+
+    replaced_by_token_hash TEXT NULL,
+
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT fk_refresh_tokens_user
+        FOREIGN KEY (user_id)
+        REFERENCES auth.users(id)
+        ON DELETE CASCADE
+);
+
+-- ==========================================================
+-- INDEXES
+-- ==========================================================
+
+CREATE INDEX idx_users_email ON auth.users(email);
+CREATE INDEX idx_users_role ON auth.users(role);
+CREATE INDEX idx_user_profiles_user_id ON auth.user_profiles(user_id);
+CREATE INDEX IF NOT EXISTS idx_refresh_tokens_user_id
+ON auth.refresh_tokens(user_id);
+CREATE INDEX IF NOT EXISTS idx_refresh_tokens_expires_at
+ON auth.refresh_tokens(expires_at);
 
 -- ==========================================================
 -- TESTING

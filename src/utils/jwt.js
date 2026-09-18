@@ -22,7 +22,7 @@ export const generateToken = (user) => {
     },
     secret,
     {
-      expiresIn: "1d",
+      expiresIn: "15m",
     },
   );
 };

@@ -1,6 +1,6 @@
 import { Router } from "express";
 
-import { register, login, profile } from "./auth.controller.js";
+import { register, login, refresh, logout, profile } from "./auth.controller.js";
 import { verifyTokenMiddleware } from "../../middleware/auth.middleware.js";
 import { validate } from "../../middleware/validate.middleware.js";
 import { registerSchema, loginSchema } from "./auth.validation.js";
@@ -96,5 +96,55 @@ router.post("/login", loginLimiter, validate(loginSchema), login);
  *         description: Unauthorized
  */
 router.get("/profile", verifyTokenMiddleware, profile);
+
+/**
+ * @openapi
+ * /api/auth/refresh:
+ *   post:
+ *     tags:
+ *       - Auth
+ *     summary: Refresh access token
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - refreshToken
+ *             properties:
+ *               refreshToken:
+ *                 type: string
+ *                 example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9... 
+ *     responses:
+ *       200:
+ *         description: Returns new access token and refresh token
+ *       401:
+ *         description: Invalid refresh token
+ */
+router.post(
+    "/refresh",
+    refresh,
+);
+
+/**
+ * @openapi
+ * /api/auth/logout:
+ *   post:
+ *     tags:
+ *       - Auth
+ *     summary: Logout user
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: User logged out successfully
+ *       401:
+ *         description: Unauthorized
+ */
+router.post(
+    "/logout",
+    logout,
+);
 
 export default router;
