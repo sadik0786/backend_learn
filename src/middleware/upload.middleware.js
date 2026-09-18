@@ -28,9 +28,14 @@ const fileFilter = (req, file, cb) => {
 
   if (allowed.includes(file.mimetype)) {
     cb(null, true);
-  } else {
-    cb(new Error("Only JPG, PNG, WEBP and PDF files are allowed"));
+    return;
   }
+  const error = new Error(
+    "Only JPG, PNG, WEBP and PDF files are allowed",
+  );
+  error.statusCode = 400;
+
+  cb(error);
 };
 
 export const upload = multer({

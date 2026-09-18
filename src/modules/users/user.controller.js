@@ -1,5 +1,6 @@
 import { asyncHandler } from "../../utils/asyncHandler.js";
 import * as userService from "./user.service.js";
+import { AppError } from "../../utils/AppError.js";
 
 // get all users
 export const getUsers = asyncHandler(async (req, res) => {

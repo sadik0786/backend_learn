@@ -282,7 +282,6 @@ router.get(
  */
 router.post(
   "/upload",
-  verifyTokenMiddleware,
   upload.single("file"),
   uploadFile,
 );
