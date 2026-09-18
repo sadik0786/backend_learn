@@ -10,6 +10,10 @@ import {
   getRefreshToken,
   revokeRefreshToken,
 } from "./auth.repository.js";
+import {
+  generateRefreshToken,
+  hashRefreshToken,
+} from "../../utils/refreshToken.js";
 
 // register
 export async function register(data) {
