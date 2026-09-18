@@ -104,23 +104,12 @@ router.get("/profile", verifyTokenMiddleware, profile);
  *     tags:
  *       - Auth
  *     summary: Refresh access token
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required:
- *               - refreshToken
- *             properties:
- *               refreshToken:
- *                 type: string
- *                 example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9... 
+ *     description: Reads the refresh token from the HttpOnly cookie set during login. No request body needed.
  *     responses:
  *       200:
- *         description: Returns new access token and refresh token
+ *         description: Returns new access token and rotated refresh token (set in cookie)
  *       401:
- *         description: Invalid refresh token
+ *         description: Invalid or expired refresh token
  */
 router.post(
     "/refresh",
