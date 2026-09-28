@@ -1,17 +1,12 @@
-import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
 
-dotenv.config();
+import { env } from "../config/env.js";
 
 export const generateToken = (user) => {
   if (!user) {
-    throw new Error("User payload is required to generate a token");
-  }
-
-  const secret = process.env.JWT_SECRET;
-
-  if (!secret) {
-    throw new Error("JWT_SECRET is not configured");
+    throw new Error(
+      "User payload is required to generate a token",
+    );
   }
 
   return jwt.sign(
@@ -20,21 +15,15 @@ export const generateToken = (user) => {
       email: user.email,
       role: user.role,
     },
-    secret,
+    env.jwt.secret,
     {
-      expiresIn: "15m",
+      expiresIn: env.jwt.accessTokenExpiresIn,
     },
   );
 };
 
 export const verifyToken = (token) => {
-  const secret = process.env.JWT_SECRET;
-
-  if (!secret) {
-    throw new Error("JWT_SECRET is not configured");
-  }
-
-  return jwt.verify(token, secret);
+  return jwt.verify(token, env.jwt.secret);
 };
 
 export default {

@@ -1,14 +1,14 @@
-import dotenv from "dotenv";
 import { Pool } from "pg";
 
-dotenv.config();
+import { env } from "./env.js";
+
 
 export const pool = new Pool({
-  host: process.env.DB_HOST,
-  port: Number(process.env.DB_PORT || 5432),
-  database: process.env.DB_NAME,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
+  host: env.db.host,
+  port: env.db.port,
+  database: env.db.name,
+  user: env.db.user,
+  password: env.db.password,
 });
 
 export const query = (text, params) => {
@@ -20,11 +20,15 @@ export async function transaction(callback) {
 
   try {
     await client.query("BEGIN");
+
     const result = await callback(client);
+
     await client.query("COMMIT");
+
     return result;
   } catch (error) {
     await client.query("ROLLBACK");
+
     throw error;
   } finally {
     client.release();
@@ -36,11 +40,15 @@ export async function withTransaction(callback) {
 
   try {
     await client.query("BEGIN");
+
     const result = await callback(client);
+
     await client.query("COMMIT");
+
     return result;
   } catch (error) {
     await client.query("ROLLBACK");
+
     throw error;
   } finally {
     client.release();

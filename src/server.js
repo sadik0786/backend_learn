@@ -12,7 +12,8 @@ async function start() {
     await query("SELECT NOW()");
 
     console.log("Database Connected");
-
+    var char = "Lorem_ipsum_dolor_sit_amet_conse";
+    console.log("character length is: " + char.length);
     app.listen(port, () => {
       console.log(`Server running on port ${port}`);
     });
